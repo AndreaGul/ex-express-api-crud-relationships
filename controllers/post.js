@@ -55,7 +55,7 @@ const show = async (req, res) => {
         if(post){
             res.json(post);
         }else{
-            throw new RestError(`Pizza con id ${id} non trovata.`, 404);
+          res.status( 404).send(`post con slug ${slug} non trovata.`);
         }
       
     } catch (err) {
