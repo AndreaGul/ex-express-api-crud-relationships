@@ -1,5 +1,4 @@
 const {PrismaClient} = require("@prisma/client");
-const { options } = require("../routers/post");
 const prisma = new PrismaClient();
 
 const bodyData ={
@@ -51,6 +50,18 @@ const bodyData ={
         in:["body"],
         isBoolean: {
             errorMessage: 'Published deve essere un booleano'
+        }
+    },
+    categoryId:{
+        in:["body"],
+        isInt:{
+            errorMessage: "Category Id deve essere un numero intero",
+            bail:true,
+        },
+        custom:{
+            options: async (value) => {
+                const categoryId
+            }
         }
     }
 }

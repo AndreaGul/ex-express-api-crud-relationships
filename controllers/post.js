@@ -3,7 +3,7 @@ const { generateSlug } = require("../utils");
 const prisma = new PrismaClient();
 
 const store = async (req, res) => {
-  const { title, content } = req.body;
+  const { title, content,categoryId,ingredients } = req.body;
 
   try {
     // Ottieni tutti i post per generare uno slug unico
@@ -15,9 +15,15 @@ const store = async (req, res) => {
       title,
       content,
       slug,
-      published: req.body.published ? true : false
+      published: req.body.published ? true : false,
+      ingredients:{
+        connect: ingredients.map(id=>({id}))
+      }
     };
 
+    if(categoryId){
+      data.categoryId = categoryId;
+    }
     // Creare un post
     const post = await prisma.post.create({ data });
     res.status(200).send(post);
