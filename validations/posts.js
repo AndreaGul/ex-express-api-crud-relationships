@@ -70,7 +70,36 @@ const bodyData ={
                 return true;
             }
         }
+    },
+    tags:{
+        in:["body"],
+        notEmpty:{
+            errorMessage: 'il tag è un campo obbligatorio',
+            bail:true,
+        },
+        isArray:{
+            errorMessage:"i tag devono essere un array",
+        },
+        custom: {
+            options: async (idCercati)=>{
+                if(idCercati === 0){
+                    throw new Error (`Un post deve avere almeno un tag`);
+                }
+                const notIntegerId= idCercati.find(id=>isNaN(parseInt(id)));
+                if(notIntegerId){
+                    throw new Error (`Uno o più ID non sono dei numeri interi.`);
+                }
+                const tags = await prisma.tag.findMany({
+                    where: { id: { in: idCercati } }
+                });
+                if(tags.length !== idCercati.length){
+                    throw new Error(`Uno o più tag specificati non esistono`);
+                }
+                return true;
+            }
+        }
     }
+    
 }
 
 module.exports ={
